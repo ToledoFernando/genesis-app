@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "font";
+  src: url("Quicksand/Quicksand-VariableFont_wght.ttf");
+}
+
+.font {
+  font-family: "font";
+}
+
+.scroll-act::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+.scroll-act::-webkit-scrollbar {
+  background-color: #00000000;
+}
+.scroll-act::-webkit-scrollbar:vertical {
+  width: 10px;
+}
+
+.scroll-act::-webkit-scrollbar:horizontal {
+  width: 10px;
+}
+
+.scroll-act::-webkit-scrollbar-thumb {
+  background-color: #858585;
+  border-radius: 20px;
+  border: 0;
+}
+
+.scroll-act::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+h1 {
+  font-size: 36px;
+}
+h2 {
+  font-size: 24px;
+}
+h3 {
+  font-size: 21px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 14px;
+}
