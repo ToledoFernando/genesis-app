@@ -78,7 +78,33 @@ export const setupHandlers = () => {
     } 
   })
 
-  // ipcMain.handle("add-job", async (_, data) => {
-  //   // createJob
-  // })
+  ipcMain.handle("create_personal", async (_, data) => {
+    try {
+      
+      const {lastName, name, phone} = data as {name: string, lastName: string, phone: string }
+      await new Promise((resolve, reject) => {
+        db.run(post.createPersonal, [v4(), Math.floor(new Date().getTime()), lastName, name, phone], (err, result) => {
+          if (err) return reject(err)
+          else return resolve(result)
+        }) 
+      })
+      return {success: true, data: "Registro creado"} 
+    } catch (error: any) {
+      return {success: false, error: error.message}
+    }
+  })
+
+  ipcMain.handle("get-personal", async () => {
+    try {
+      const data = await new Promise((resolve, reject) => {
+        db.all(get.getAllPersonal, (err, result) => {
+          if (err) return reject(err)
+          else return resolve(result)
+        })
+      })
+      return {success: true, data}
+    } catch (error: any) {
+      return {success: false, error: error.message}
+    } 
+  })
 }

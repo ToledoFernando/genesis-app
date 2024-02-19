@@ -30,13 +30,16 @@ clients.id;`,
   WHERE clients.id = ?
   GROUP BY 
   clients.id`,
-  getJobsByUser: `SELECT * FROM jobs WHERE clients_id = ?`
+  getJobsByUser: `SELECT * FROM jobs WHERE clients_id = ?`,
+  getAllPersonal : `SELECT * FROM personal`
+
 }
 
 export const post = {
   createClient: `INSERT INTO clients (id, createdAt, lastName, nickname, name, phono)
      VALUES (?,?,?,?,?,?)`,
-  createJob: `INSERT INTO jobs (id, createdAt, job, observation, clients_id) VALUES (?,?,?,?,?)`
+  createJob: `INSERT INTO jobs (id, createdAt, job, observation, clients_id) VALUES (?,?,?,?,?)`,
+  createPersonal: `INSERT INTO personal (id, createdAt, lastName, name, phono) VALUES (?, ?, ?, ?, ?)`
 }
 
 export const del = {}
@@ -54,14 +57,13 @@ export const create: { [key: string]: string } = {
   updatedAt INTEGER
 )
 `,
-  personal: `CREATE TABLE IF NOT EXIST jobs (
+  personal: `CREATE TABLE IF NOT EXISTS personal (
   id TEXT PRIMARY KEY,
   name TEXT,
   lastName TEXT,
   phono TEXT,
-  email TEXT,
   createdAt INTEGER,
-  updatedAT INTEGER
+  updatedAt INTEGER
 )`,
   jobs: `CREATE TABLE IF NOT EXISTS jobs (
   id TEXT PRIMARY KEY,
