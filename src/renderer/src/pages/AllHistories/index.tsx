@@ -138,7 +138,7 @@ function Index() {
       field: 'last_job',
       headerName: 'Último turno',
       minWidth: 100,
-      width: 180,
+      width: 150,
       maxWidth: 250,
       valueFormatter: (item) => {
         if (item.value) {
@@ -161,7 +161,7 @@ function Index() {
     {
       field: 'createdAt',
       headerName: 'Creado',
-      width: 150,
+      width: 100,
       valueFormatter: (item) => {
         return new Date(item.value).toLocaleDateString()
       }

@@ -24,4 +24,6 @@ export interface IJob {
   job: string;
   date: Date;
   observation: string;
+  personal_id: string;
+  price: string;
 }

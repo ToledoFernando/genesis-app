@@ -1,6 +1,9 @@
 import { Button, TextField } from '@mui/material'
+import { sendData } from '@renderer/helpers/sendData'
 import { ChangeEventHandler, useState } from 'react'
+import toast from 'react-hot-toast'
 import {useNavigate} from "react-router-dom"
+import Store from "../../store"
 
 const initialState = {
   name: '',
@@ -12,14 +15,22 @@ function Index() {
   const [formData, setFormData] = useState(initialState)
   const navigate = useNavigate();
 
+  const store = Store.General.getState()
+
   const handleChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
     const { name, value } = e.target
     setFormData({ ...formData, [name]: value })
   }
 
   const handleSubmit = async () => {
-    const response = await window.electron.ipcRenderer.invoke("create_personal", formData)
-    console.log(response)
+    const response = await sendData("create_personal", formData)
+    if (response.success) {
+      toast.success("Personal creado con exito")
+      store.getPersonal()
+      navigate("/personal")
+    }else {
+      toast.error(response.error as string)
+    }
   }
 
   const handleCancel = () => {

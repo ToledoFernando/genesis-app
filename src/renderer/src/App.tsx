@@ -10,11 +10,18 @@ import DetailClient from "./pages/DetailClient"
 import Config from "./pages/Config"
 import Personal from "./pages/Personal"
 import CreatePersonal from "./pages/CreatePersonal"
+import { useEffect } from "react";
+import Store from "./store"
 
 function App() {
+
+  useEffect(()=>{
+    Store.General.getState().getPersonal()
+  },[])
+
   return (
     <div className="bg-gray-100 h-screen w-screen gap-4 flex overflow-hidden">
-      <Toaster position="top-left" toastOptions={{style: {boxShadow: "0px 5px 15px #00000054"}}}/>
+      <Toaster position="bottom-left" toastOptions={{style: {boxShadow: "0px 5px 15px #00000054"}, duration: 2000}} />
       <ThemeProvider theme={theme}>
         <SideBar />
         <div className="w-full overflow-auto scroll-act">

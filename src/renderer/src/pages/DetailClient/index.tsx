@@ -24,6 +24,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import toast from 'react-hot-toast'
+import { formatToMoney } from '@renderer/helpers/format'
 
 function stringToColor(string: string) {
   let hash = 0
@@ -57,7 +58,11 @@ const InicialJob: IJobs = {
   job: "",
   observation: "",
   id: "",
-  updatedAt: Math.floor(new Date().getTime())
+  updatedAt: Math.floor(new Date().getTime()),
+  personal_id: "",
+  personalLastName: "",
+  personalName: "",
+  price: 0
 }
 
 function Index() {
@@ -87,9 +92,8 @@ function Index() {
     {
       field: 'id',
       headerName: 'ID',
-      minWidth: 100,
-      width: 100,
-      maxWidth: 200
+      minWidth: 60,
+      width: 60,
     },
     {
       field: 'job',
@@ -102,7 +106,7 @@ function Index() {
       field: 'observation',
       headerName: 'Observación',
       minWidth: 100,
-      width: 300,
+      width: 150,
       maxWidth: 250,
       renderCell: (params) => {
         return (
@@ -112,6 +116,12 @@ function Index() {
           ></div>
         )
       }
+    },
+    {
+      field: "price",
+      headerName: "Precio",
+      minWidth: 100,
+      valueFormatter: (params) => formatToMoney(params.value.toString())
     },
     {
       field: 'createdAt',
@@ -279,6 +289,10 @@ function Index() {
                         __html: showDetail.observation.replaceAll('\n', '</br>')
                       }}
                     ></div>
+                    <div className='flex flex-col gap-2 my-2 mt-4'>
+                      <p>Personal: <b>{formatName(showDetail.personalName)} {formatName(showDetail.personalLastName)}</b></p>
+                      <p>Precio del trabajo: <b>{formatToMoney(showDetail.price.toString())}</b></p>
+                    </div>
                   </DialogContent>
                   <DialogActions>
                     <Tooltip className='mr-4' title={formatTime(showDetail.createdAt).Hora}>

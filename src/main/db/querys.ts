@@ -30,7 +30,8 @@ clients.id;`,
   WHERE clients.id = ?
   GROUP BY 
   clients.id`,
-  getJobsByUser: `SELECT * FROM jobs WHERE clients_id = ?`,
+  getJobsByUser: `SELECT jobs.*, personal.name AS personalName, personal.lastName AS personalLastName FROM jobs
+  LEFT JOIN personal ON jobs.personal_id = personal.id WHERE clients_id = ?`,
   getAllPersonal : `SELECT * FROM personal`
 
 }
@@ -38,11 +39,14 @@ clients.id;`,
 export const post = {
   createClient: `INSERT INTO clients (id, createdAt, lastName, nickname, name, phono)
      VALUES (?,?,?,?,?,?)`,
-  createJob: `INSERT INTO jobs (id, createdAt, job, observation, clients_id) VALUES (?,?,?,?,?)`,
+  createJob: `INSERT INTO jobs (id, createdAt, job, observation, clients_id, personal_id, price) VALUES (?,?,?,?,?,?,?)`,
   createPersonal: `INSERT INTO personal (id, createdAt, lastName, name, phono) VALUES (?, ?, ?, ?, ?)`
 }
 
-export const del = {}
+export const del = {
+  personalById: `DELETE FROM personal WHERE id = ?`,
+  allJobsByPersonalId: `DELETE FROM jobs WHERE personal_id = ?`,
+}
 
 export const join = {}
 

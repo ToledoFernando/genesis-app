@@ -6,3 +6,18 @@ export const formatName = (name: string) => {
   const nombreFormateado = palabrasCapitalizadas.join(' ')
   return nombreFormateado
 }
+
+export const formatToMoney = (number: string): string => {
+  let numberStr = number;
+  
+  let parts = numberStr.split(',');
+  
+  let integerPart = parts[0];
+  let formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  
+  if (parts.length > 1) {
+      return `$${formattedIntegerPart},${parts[1]}`;
+  } else {
+      return `$${formattedIntegerPart}`;
+  }
+}
