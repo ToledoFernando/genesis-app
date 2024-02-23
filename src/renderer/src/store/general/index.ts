@@ -8,7 +8,7 @@ export const General = create(
     personal: [],
     setPersonal: (data) => set({personal: data}),
     getPersonal: async () => {
-      const response = await sendData('get-personal')
+      const response = await sendData('get-all-personal')
     if (response.success) {
       const data = response.data as IPersonal[]
       console.log(data)

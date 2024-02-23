@@ -40,11 +40,6 @@ export const setupHandlers = () => {
       const jobInfo = data as { job: string, observation: string, date: string, id: string, personal_id: string; price: string }
       await new Promise((resolve, reject) => {
         db.run(post.createJob, [v4(), Math.floor(new Date(jobInfo.date).getTime()), jobInfo.job, jobInfo.observation, jobInfo.id, jobInfo.personal_id, Number(jobInfo.price)], (result, err) => {
-          console.log("===========================")
-          console.log(result)
-          console.log("789128971278128712781271278127812788")
-          console.log(err)
-          console.log("===========================")
           if (err) return reject(err)
           else return resolve(result)
         }) 
@@ -99,7 +94,7 @@ export const setupHandlers = () => {
     }
   })
 
-  ipcMain.handle("get-personal", async () => {
+  ipcMain.handle("get-all-personal", async () => {
     try {
       const data = await new Promise((resolve, reject) => {
         db.all(get.getAllPersonal, (err, result) => {
@@ -130,6 +125,34 @@ export const setupHandlers = () => {
       })
 
       return {success: true, data: "Datos eliminados"}
+    } catch (error: any) {
+      return {success: false, error: error.message}
+    } 
+  })
+
+  ipcMain.handle("get-personal", async (_, id) => {
+    try {
+      const data = await new Promise((resolve, reject) => {
+        db.get(get.getPersonalById, [id], (err, result) => {
+          if (err) return reject(err)
+          else return resolve(result)
+        })
+      })
+      return {success: true, data}
+    } catch (error: any) {
+      return {success: false, error: error.message}
+    }
+  })
+
+  ipcMain.handle("get-jobs-by-personal", async(_, id) => {
+    try {
+      const data = await new Promise((resolve, reject) => {
+        db.all(get.getJobsByPersonal, [id], (err, result) => {
+          if (err) return reject(err)
+          else return resolve(result)
+        })
+      })
+      return {success: true, data}
     } catch (error: any) {
       return {success: false, error: error.message}
     } 

@@ -32,8 +32,9 @@ clients.id;`,
   clients.id`,
   getJobsByUser: `SELECT jobs.*, personal.name AS personalName, personal.lastName AS personalLastName FROM jobs
   LEFT JOIN personal ON jobs.personal_id = personal.id WHERE clients_id = ?`,
-  getAllPersonal : `SELECT * FROM personal`
-
+  getAllPersonal : `SELECT * FROM personal`,
+  getPersonalById: `SELECT * FROM personal WHERE id = ?`,
+  getJobsByPersonal: `SELECT * FROM jobs WHERE personal_id = ?`,
 }
 
 export const post = {

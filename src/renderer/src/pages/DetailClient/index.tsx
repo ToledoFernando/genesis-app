@@ -6,7 +6,11 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
   IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
   Tooltip
 } from '@mui/material'
@@ -25,6 +29,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import toast from 'react-hot-toast'
 import { formatToMoney } from '@renderer/helpers/format'
+import Store from "../../store"
 
 function stringToColor(string: string) {
   let hash = 0
@@ -62,7 +67,7 @@ const InicialJob: IJobs = {
   personal_id: "",
   personalLastName: "",
   personalName: "",
-  price: 0
+  price: ""
 }
 
 function Index() {
@@ -78,6 +83,7 @@ function Index() {
   })
   const [openShowDetail, setOpenShowDetail] = useState<boolean>(false)
   const [showForm, setShowForm] = useState<boolean>(false)
+  const generalStore = Store.General.getState()
 
   function generateColor() {
     const letrasHex = '0123456789ABCDEF'
@@ -126,9 +132,11 @@ function Index() {
     {
       field: 'createdAt',
       headerName: 'Fecha',
+      type: "number",
       minWidth: 100,
       width: 100,
       maxWidth: 200,
+      sortComparator: (a, b) => a < b ? -1 : 1,
       renderCell: (params) => {
         return (
           <Tooltip title={formatTime(params.row.createdAt).Hora}>
@@ -158,7 +166,7 @@ function Index() {
   const getAllData = async () => {
     const jobsResponse = await sendData('get-jobs', id)
     const userResponse = await sendData('get-user', id)
-    if (jobsResponse.success) setJobs(jobsResponse.data)
+    if (jobsResponse.success) setJobs(jobsResponse.data.sort((a,b) => a.createdAt > b.createdAt ? -1 : 1))
     if (userResponse.success) setData(userResponse.data)
   }
 
@@ -289,6 +297,7 @@ function Index() {
                         __html: showDetail.observation.replaceAll('\n', '</br>')
                       }}
                     ></div>
+                    <hr className='mt-4' />
                     <div className='flex flex-col gap-2 my-2 mt-4'>
                       <p>Personal: <b>{formatName(showDetail.personalName)} {formatName(showDetail.personalLastName)}</b></p>
                       <p>Precio del trabajo: <b>{formatToMoney(showDetail.price.toString())}</b></p>
@@ -314,6 +323,26 @@ function Index() {
           <TextField label="Trabajo" onChange={(e) => setJob({...job, job: e.target.value})} />
           <DateTimePicker format='DD/MM/YYYY hh:mm a' className='w-max' onChange={({$d}: any) => setJob({...job, createdAt: $d})} />
           <ReactQuill className='min-h-[200px]' style={{height: 200}} value={job?.observation} onChange={(e) => setJob({...job, observation: e as string})} />
+          <div className='mt-14 grid grid-cols-2 gap-6'>
+          <FormControl>
+            <InputLabel id="demo-simple-select-label">Selecciona un personal</InputLabel>
+              <Select
+                className='bg-white'
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                onChange={(e) => setJob({...job, personal_id: e.target.value})}
+                value={job.personal_id}
+                label="Selecciona un personal"
+              >
+                {generalStore.personal.map((item, index) => (
+                  <MenuItem key={index} value={item.id}>
+                    {item.name}
+                  </MenuItem>
+                ))}
+              </Select>
+          </FormControl>
+          <TextField label='Precio del trabajo (sin puntos ni simbolos). Ej: 2300' type='number' value={job.price} onChange={(e) => setJob({...job, price: e.target.value})} />
+          </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={()=>setShowForm(false)}>Cerrar</Button>

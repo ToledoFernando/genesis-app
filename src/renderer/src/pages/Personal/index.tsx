@@ -7,14 +7,13 @@ import {
   IconButton,
   InputAdornment,
   TextField,
-  Tooltip
 } from '@mui/material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { gridLocaleText } from '@renderer/config'
 import { sendData } from '@renderer/helpers/sendData'
 import { useEffect, useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { IPersonal } from './types'
 import { formatName } from '@renderer/helpers/format'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
@@ -24,10 +23,12 @@ import EditIcon from '@mui/icons-material/Edit'
 import toast from 'react-hot-toast'
 import WarningIcon from '@mui/icons-material/Warning'
 import Store from "../../store"
+import InfoIcon from '@mui/icons-material/Info';
 
 function Index() {
   const [showAlert, setShowAlert] = useState<boolean>(false)
   const [allPersonal, setAllPersonal] = useState<IPersonal[]>([])
+  const navigate = useNavigate()
   const store = Store.General.getState()
 
   const handleDelete = (item: IPersonal) => {
@@ -139,6 +140,8 @@ function Index() {
       field: 'action',
       headerName: 'Acciones',
       headerAlign: 'center',
+      width: 180,
+      align: "center",
       renderCell: (params) => {
         return (
           <div>
@@ -147,6 +150,9 @@ function Index() {
             </IconButton>
             <IconButton>
               <EditIcon />
+            </IconButton>
+            <IconButton onClick={()=>navigate(`/personal/detail/${params.row.id}`)}>
+              <InfoIcon />
             </IconButton>
           </div>
         )

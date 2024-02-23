@@ -9,6 +9,7 @@ import AllHistories from "./pages/AllHistories";
 import DetailClient from "./pages/DetailClient"
 import Config from "./pages/Config"
 import Personal from "./pages/Personal"
+import PersonalDetail from "./pages/PersonalDetail"
 import CreatePersonal from "./pages/CreatePersonal"
 import { useEffect } from "react";
 import Store from "./store"
@@ -33,6 +34,7 @@ function App() {
             <Route path="/settings" element={<Config />} />
             <Route path="/personal" element={<Personal />} />
             <Route path="/personal/create" element={<CreatePersonal />} />
+            <Route path="/personal/detail/:id" element={<PersonalDetail />} />
           </Routes>
         </div>
       </ThemeProvider>

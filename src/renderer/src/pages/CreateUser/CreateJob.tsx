@@ -13,7 +13,6 @@ import 'react-quill/dist/quill.snow.css'
 
 function CreateJob({ id }: { id: string }) {
   const [data, setData] = useState<IJob>({ job: '', observation: '', date: new Date(), personal_id: "", price: "" })
-  const [personalSelected, setpersonalSelected] = useState<string>('')
   const navigate = useNavigate()
 
   const generalStore = Store.General.getState()

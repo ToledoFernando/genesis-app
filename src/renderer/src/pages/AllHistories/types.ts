@@ -17,7 +17,7 @@ export interface IJobs {
   createdAt: number
   updatedAt: any
   clients_id: string
-  price: number
+  price: string
   personal_id: string
   personalName: string
   personalLastName: string
