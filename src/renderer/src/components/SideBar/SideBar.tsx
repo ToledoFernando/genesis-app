@@ -20,7 +20,7 @@ function SideBar() {
   const config = Store.Config()
 
   return (
-    <div className={`${config.openMenu ? "w-[20%]": "w-[80px]" } pr-2 transition-all duration-300 h-screen relative border-r border-gray-300`}>
+    <div style={{backgroundColor: config.sideBarBg}} className={`${config.openMenu ? "w-[20%]": "w-[80px]" } pr-2 pt-4 transition-all duration-300 h-screen relative border-r border-gray-300`}>
       <div className='h-5/6 mt-4 flex flex-col gap-4'>
         {LinksPages.map((option, index) => <LinkOptions key={index} {...option} /> )}
         <LinkOptions Icon={FeedIcon} hidden={true} href="/detail" name="Detalle de cliente" />

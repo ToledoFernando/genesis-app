@@ -1,18 +1,19 @@
-import { app, shell, BrowserWindow } from 'electron'
+import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { setupHandlers } from './event';
 
 function createWindow(): void {
-  // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
     show: false,
+    frame: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
+      // devTools: false,
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
     }
@@ -20,6 +21,22 @@ function createWindow(): void {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
+  })
+
+  ipcMain.handle("maximize", () => {
+    if (mainWindow.isMaximized()) mainWindow.unmaximize()
+    else mainWindow.maximize()
+    return {success: true, data: ""}
+  })
+
+  ipcMain.handle("minimize", () => {
+    mainWindow.minimize()
+    return {success: true, data: ""}
+  })
+
+  ipcMain.handle("close-app", () => {
+    mainWindow.close()
+    return {success: true, data: ""}
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {

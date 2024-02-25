@@ -1,11 +1,12 @@
 import sqlite3 from "sqlite3";
 import path from "path";
 import { create } from "./querys";
+import { app } from "electron";
 
-// const userDataPath = app.getPath('userData');
-// const dbPath = path.join(userDataPath, 'database.sqlite');
+const userDataPath = app.getPath('userData');
+const dbPath = path.join(userDataPath, 'database.sqlite');
 
-const dbPath = path.join(__dirname, "database.sqlite");
+// const dbPath = path.join(__dirname, "database.sqlite");
 
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) console.log("OCURRIO UN ERROR AL CONECTAR A LA DB: ", err.message);

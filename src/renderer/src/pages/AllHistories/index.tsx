@@ -354,15 +354,8 @@ function Index() {
             localeText={gridLocaleText}
             rows={data}
             columns={column}
+            hideFooter
             loading={isLoad}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 5
-                }
-              }
-            }}
-            pageSizeOptions={[5]}
             autoHeight
           />
         </Box>

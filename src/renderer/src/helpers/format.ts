@@ -21,3 +21,14 @@ export const formatToMoney = (number: string): string => {
       return `$${formattedIntegerPart}`;
   }
 }
+
+export function getContrastColor(hexColor) {
+  if (hexColor === "#00000000") return "#000"
+  let r = parseInt(hexColor.substr(1, 2), 16);
+  let g = parseInt(hexColor.substr(3, 2), 16);
+  let b = parseInt(hexColor.substr(5, 2), 16);
+
+  let luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+  return luminance > 0.5 ? "#000" : "#fff";
+}

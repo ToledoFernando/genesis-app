@@ -53,3 +53,15 @@ h5 {
 h6 {
   font-size: 14px;
 }
+
+.genesis {
+  background-image: linear-gradient(to top right, #3deedf, #9814e9 );
+}
+
+.bar {
+  -webkit-app-region: drag
+}
+
+.bar * {
+  -webkit-app-region: none;
+}

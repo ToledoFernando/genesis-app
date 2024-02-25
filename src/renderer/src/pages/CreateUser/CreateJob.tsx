@@ -24,7 +24,7 @@ function CreateJob({ id }: { id: string }) {
   const handleSubmit = async () => {
     const response = await sendData('create-job', { ...data, id })
     if (response.success) {
-      navigate('/')
+      navigate('/all_histories')
       return toast.success('Trabajo agregado con exito' as string)
     }
     return toast.error(response.error as string)

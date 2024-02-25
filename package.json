@@ -1,10 +1,9 @@
 {
-  "name": "electron-app",
-  "version": "1.0.0",
-  "description": "An Electron application with React and TypeScript",
+  "name": "Genesis-app",
+  "version": "0.1.0",
+  "description": "App de gestion de turnos para clientes de GENESIS",
   "main": "./out/main/index.js",
-  "author": "example.com",
-  "homepage": "https://electron-vite.org",
+  "author": "ftoledo.dev",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
@@ -33,6 +32,7 @@
     "@mui/x-date-pickers": "^6.19.4",
     "dayjs": "^1.11.10",
     "electron-updater": "^6.1.7",
+    "react-color-palette": "^7.1.0",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^5.0.1",
     "react-quill": "^2.0.0",

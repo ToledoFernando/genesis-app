@@ -21,4 +21,5 @@ export interface IJobs {
   personal_id: string
   personalName: string
   personalLastName: string
+  performans?: number | undefined
 }

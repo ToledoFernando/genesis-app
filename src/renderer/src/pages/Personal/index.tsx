@@ -28,6 +28,8 @@ import InfoIcon from '@mui/icons-material/Info';
 function Index() {
   const [showAlert, setShowAlert] = useState<boolean>(false)
   const [allPersonal, setAllPersonal] = useState<IPersonal[]>([])
+  const [searchTerm, setSearchTerm] = useState<string>("")
+  const [allPersonalAux, setAllPersonalAux] = useState<IPersonal[]>([])
   const navigate = useNavigate()
   const store = Store.General.getState()
 
@@ -82,6 +84,7 @@ function Index() {
 
   useEffect(()=> {{
     setAllPersonal(store.personal)
+    setAllPersonalAux(store.personal)
   }}, [store.personal])
 
   const columns: GridColDef[] = [
@@ -145,12 +148,12 @@ function Index() {
       renderCell: (params) => {
         return (
           <div>
-            <IconButton onClick={() => handleDelete(params.row)} className="group">
+            {/* <IconButton onClick={() => handleDelete(params.row)} className="group">
               <DeleteIcon className="group-hover:text-red-900" />
             </IconButton>
             <IconButton>
               <EditIcon />
-            </IconButton>
+            </IconButton> */}
             <IconButton onClick={()=>navigate(`/personal/detail/${params.row.id}`)}>
               <InfoIcon />
             </IconButton>
@@ -160,12 +163,28 @@ function Index() {
     }
   ]
 
+  useEffect(()=>{
+    if(searchTerm.length > 0){
+      const result = allPersonalAux.filter(item => {
+        const fullName = `${item.name} ${item.lastName}`
+        return fullName.toLowerCase().includes(searchTerm.toLowerCase())
+      })
+      console.log(result)
+      setAllPersonal(result)
+    }else{
+      setAllPersonal(allPersonalAux)
+      console.log("aqui")
+    }
+  },[searchTerm])
+
   return (
     <>
       <div className="pr-4">
         <h1 className="text-2xl font-semibold py-6">Administrador de Personal</h1>
         <TextField
           className="w-6/12 mb-4"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
