@@ -1,6 +1,6 @@
 {
   "name": "genesisapp",
-  "version": "1.0.2",
+  "version": "1.0.1",
   "description": "App de gestion de turnos para clientes de GENESIS",
   "main": "./out/main/index.js",
   "author": "ftoledo.dev",

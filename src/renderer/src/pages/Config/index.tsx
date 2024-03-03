@@ -5,6 +5,7 @@ import { Config } from '@renderer/store/config'
 import { useState } from 'react'
 import { IColor } from 'react-color-palette'
 import { sendData } from '@renderer/helpers/sendData'
+import toast from 'react-hot-toast'
 
 function Index() {
   const [newColor, setNewColor] = useState<string>('')
@@ -14,14 +15,16 @@ function Index() {
   const confirmChange = (c: string) => {
     config.setColor(c)
     // window.location.reload()
-    sendData("reload")
+    // sendData("reload")
+    toast.success(<p><b>Color cambiado</b> (Puede que necesite reiniciar la aplicación)</p>)
   }
 
   const confirmChangeSideBar = (b?: boolean) => {
     if (b) config.setSideBarBg("#00000000")
     else config.setSideBarBg(sideBar)
     // window.location.reload();
-    sendData("reload")
+    // sendData("reload")
+    toast.success(<p><b>Color cambiado</b> (Puede que necesite reiniciar la aplicación)</p>)
   }
 
   const handleChangeSidebar = (c: IColor) => {
