@@ -8,7 +8,7 @@ const currentPath = location.pathname;
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <BrowserRouter basename={currentPath}>
+    <BrowserRouter basename={currentPath} >
       <App />
     </BrowserRouter>
   </React.StrictMode>

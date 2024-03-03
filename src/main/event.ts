@@ -1,10 +1,18 @@
-import { ipcMain } from "electron";
+import { app, ipcMain } from "electron";
 import db from "./db/conn";
 import { del, get, post } from "./db/querys";
 import { IClient } from "./types/client";
 import v4 from "uuid4"
 
 export const setupHandlers = () => {
+
+  ipcMain.handle("get_version", async () => {
+    return {
+      success: true,
+      data: app.getVersion(),
+    };
+  })
+
   ipcMain.handle('get-all-users', async () => {
     try {
       const data = await new Promise((resolve, reject) => {
