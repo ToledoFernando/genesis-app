@@ -19,7 +19,6 @@ import { formatName } from '@renderer/helpers/format'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import { formatTime } from '@renderer/helpers/time'
 import DeleteIcon from '@mui/icons-material/Delete'
-import EditIcon from '@mui/icons-material/Edit'
 import toast from 'react-hot-toast'
 import WarningIcon from '@mui/icons-material/Warning'
 import Store from "../../store"
@@ -148,9 +147,10 @@ function Index() {
       renderCell: (params) => {
         return (
           <div>
-            {/* <IconButton onClick={() => handleDelete(params.row)} className="group">
+            <IconButton onClick={() => handleDelete(params.row)} className="group">
               <DeleteIcon className="group-hover:text-red-900" />
             </IconButton>
+            {/*
             <IconButton>
               <EditIcon />
             </IconButton> */}

@@ -2,7 +2,7 @@ import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
 import { Dispatch, SetStateAction, useState } from 'react'
-import { Button, Typography } from '@mui/material'
+import { Button } from '@mui/material'
 import CreateUser from './CreateUser'
 import CreateJob from './CreateJob'
 

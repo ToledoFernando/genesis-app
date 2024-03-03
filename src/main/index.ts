@@ -1,8 +1,10 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, Notification } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { setupHandlers } from './event';
+import {autoUpdater} from "electron-updater"
+
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
@@ -59,6 +61,43 @@ function createWindow(): void {
 app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.genesisapp')
+
+  autoUpdater.setFeedURL("https://github.com/ToledoFernando/genesis-app/releases/latest")
+
+  autoUpdater.checkForUpdates()
+  .catch((err) => {
+    new Notification({
+      title: 'Genesis Error',
+      body: 'Error al comprobar version: '+ err.message,
+    }).show();
+  })
+
+  autoUpdater.on('update-available', () => {
+    new Notification({
+      title: 'Genesis updater',
+      body: 'Actualizacion disponible'
+    }).show();
+  })
+  autoUpdater.on('update-downloaded', () => {
+    new Notification({
+      title: 'Genesis - download',
+      body: 'Actualizacion descargada'
+    }).show();
+  })
+
+  autoUpdater.on("update-not-available", () => {
+    new Notification({
+      title: 'Genesis - not',
+      body: 'Actualizacion no disponible'
+    }).show();
+  })
+
+  autoUpdater.on("error", (error) => {
+    new Notification({
+      title: 'Genesis',
+      body: 'JIJIJIJA: '+ error.message,
+    }).show();
+  })
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
