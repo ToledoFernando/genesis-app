@@ -1,10 +1,9 @@
-import { app, shell, BrowserWindow, ipcMain, Notification } from 'electron'
+import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { setupHandlers } from './event';
-import {autoUpdater} from "electron-updater"
-
+import { checkUpdate } from './check';
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
@@ -15,7 +14,7 @@ function createWindow(): void {
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
-      // devTools: false,
+      devTools: false,
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
     }
@@ -41,6 +40,11 @@ function createWindow(): void {
     return {success: true, data: ""}
   })
 
+  ipcMain.handle("reload", () => {
+    mainWindow.reload()
+    return {success: true, data: ""}
+  })
+
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }
@@ -53,6 +57,8 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  checkUpdate(mainWindow)
 }
 
 // This method will be called when Electron has finished
@@ -61,43 +67,6 @@ function createWindow(): void {
 app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.genesisapp')
-
-  autoUpdater.setFeedURL("https://github.com/ToledoFernando/genesis-app/releases/latest")
-
-  autoUpdater.checkForUpdates()
-  .catch((err) => {
-    new Notification({
-      title: 'Genesis Error',
-      body: 'Error al comprobar version: '+ err.message,
-    }).show();
-  })
-
-  autoUpdater.on('update-available', () => {
-    new Notification({
-      title: 'Genesis updater',
-      body: 'Actualizacion disponible'
-    }).show();
-  })
-  autoUpdater.on('update-downloaded', () => {
-    new Notification({
-      title: 'Genesis - download',
-      body: 'Actualizacion descargada'
-    }).show();
-  })
-
-  autoUpdater.on("update-not-available", () => {
-    new Notification({
-      title: 'Genesis - not',
-      body: 'Actualizacion no disponible'
-    }).show();
-  })
-
-  autoUpdater.on("error", (error) => {
-    new Notification({
-      title: 'Genesis',
-      body: 'JIJIJIJA: '+ error.message,
-    }).show();
-  })
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
@@ -115,6 +84,7 @@ app.whenReady().then(() => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

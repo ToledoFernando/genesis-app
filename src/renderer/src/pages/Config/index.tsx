@@ -4,6 +4,7 @@ import style from 'styled-components'
 import { Config } from '@renderer/store/config'
 import { useState } from 'react'
 import { IColor } from 'react-color-palette'
+import { sendData } from '@renderer/helpers/sendData'
 
 function Index() {
   const [newColor, setNewColor] = useState<string>('')
@@ -12,13 +13,15 @@ function Index() {
 
   const confirmChange = (c: string) => {
     config.setColor(c)
-    window.location.reload()
+    // window.location.reload()
+    sendData("reload")
   }
 
   const confirmChangeSideBar = (b?: boolean) => {
     if (b) config.setSideBarBg("#00000000")
     else config.setSideBarBg(sideBar)
-    window.location.reload();
+    // window.location.reload();
+    sendData("reload")
   }
 
   const handleChangeSidebar = (c: IColor) => {
