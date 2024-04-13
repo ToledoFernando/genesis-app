@@ -1,4 +1,4 @@
-import { DataGrid, GridColDef } from '@mui/x-data-grid'
+import { DataGrid, GridCellEditStopParams, GridColDef } from '@mui/x-data-grid'
 import { gridLocaleText } from '../../config'
 import {
   Box,
@@ -16,7 +16,7 @@ import {
   MenuItem,
   TextField,
   Tooltip,
-  Typography,
+  Typography
 } from '@mui/material'
 import { FaSearch } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
@@ -26,10 +26,7 @@ import { IDataClients } from './types'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import FeedIcon from '@mui/icons-material/Feed'
 import { formatTime } from '@renderer/helpers/time'
-import {
-  DateCalendar,
-  LocalizationProvider
-} from '@mui/x-date-pickers'
+import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import DateRangeIcon from '@mui/icons-material/DateRange'
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
@@ -37,6 +34,8 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
 import { Filter } from '@renderer/store/filter'
 import HelpIcon from '@mui/icons-material/Help'
 import { IKey } from '@renderer/store/filter/types'
+import ReplayIcon from '@mui/icons-material/Replay';
+import toast from 'react-hot-toast'
 
 const formatName = (name: string) => {
   const palabras = name.split(' ')
@@ -52,6 +51,8 @@ function Index() {
   const [dataAux, setDataAux] = useState<IDataClients[]>([])
   const [isLoad, setIsLoad] = useState<boolean>(true)
   const [searchTerm, setSearchTerm] = useState<string>('')
+
+  const [bd, setBd] = useState<boolean>(false)
 
   //
   const [filterTurn, setFilterTurn] = useState<boolean>(false)
@@ -80,24 +81,24 @@ function Index() {
     {
       field: 'id',
       headerName: 'ID',
-      minWidth: 100,
-      width: 100,
-      maxWidth: 200,
+      flex: 1,
+      maxWidth: 70,
       type: 'string',
       headerAlign: 'center'
     },
     {
       field: 'name',
+      editable: true,
       headerName: 'Nombre',
+      flex: 1,
       minWidth: 100,
-      width: 180,
-      maxWidth: 200,
       valueFormatter: (item) => formatName(item.value)
     },
     {
       field: 'lastName',
       headerName: 'Apellido',
       minWidth: 100,
+      editable: true,
       width: 180,
       maxWidth: 250,
       valueFormatter: (item) => formatName(item.value)
@@ -105,6 +106,7 @@ function Index() {
     {
       field: 'nickName',
       headerName: 'Apodo',
+      editable: true,
       minWidth: 100,
       width: 140,
       maxWidth: 250,
@@ -114,6 +116,7 @@ function Index() {
       field: 'phono',
       headerName: 'Celular',
       minWidth: 100,
+      editable: true,
       width: 160,
       maxWidth: 250,
       renderCell: (params) => {
@@ -128,23 +131,23 @@ function Index() {
     {
       field: 'total_jobs',
       headerName: 'Turnos total',
+      headerAlign: 'center',
       align: 'center',
       cellClassName: 'font-extrabold',
+      flex: 1,
       minWidth: 100,
-      width: 150,
-      maxWidth: 200
+      maxWidth: 150
     },
     {
       field: 'last_job',
       headerName: 'Último turno',
-      minWidth: 100,
-      width: 150,
-      maxWidth: 250,
+      flex: 1,
+      minWidth: 200,
       valueFormatter: (item) => {
         if (item.value) {
           return new Date(item.value).toLocaleDateString()
         }
-        return 'No hay turnos'
+        return 'Sin turnos'
       },
       renderCell: (params) => {
         return (
@@ -161,51 +164,67 @@ function Index() {
     {
       field: 'createdAt',
       headerName: 'Creado',
-      width: 100,
+      headerAlign: 'center',
+      flex: 1,
+      align: 'center',
+      minWidth: 150,
+      maxWidth: 200, 
       valueFormatter: (item) => {
         return new Date(item.value).toLocaleDateString()
       }
     },
     {
-      field: 'actions',
-      headerName: 'Acciones',
+      field: '000',
+      headerName: '',
       align: 'center',
-      headerAlign: 'center',
-      minWidth: 100,
-      width: 150,
-      maxWidth: 200,
+      type: 'actions',
+      flex: 1,
       renderCell: (params) => {
         return (
-          <Tooltip title="Ver informacion del cliente">
-            <IconButton onClick={() => navigate(`/detail/${params.row.id}`)}>
-              <FeedIcon />
-            </IconButton>
-          </Tooltip>
+          <>
+            <Tooltip title="Ver informacion del cliente">
+              <IconButton onClick={() => navigate(`/detail/${params.row.id}`)}>
+                <FeedIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Actualizar datos">
+              <IconButton onClick={()=>handleSubmit(params.row)}>
+                <ReplayIcon />
+              </IconButton>
+            </Tooltip>
+          </>
         )
       }
     }
   ]
 
+  const handleSubmit = async (e: any) => {
+    const t = toast.loading("Actualizando....")
+    const response = await sendData('update-user', e)
+    if (response.success) return toast.success("Actualizado con exito", {id: t})
+    else return toast.error(`Error al actualizar: `+ response.error, {id: t})
+  }
+
   const setFiltro = () => {
-    let result: IDataClients[] = dataAux;
+    let result: IDataClients[] = dataAux
     if (filterStore.register) {
-      const num = filterStore.register as number;
+      const num = filterStore.register as number
       result = result.filter((item) => item.createdAt >= num)
     }
     if (filterStore.create) {
-      const num = filterStore.create as number;
+      const num = filterStore.create as number
       result = result.filter((item) => item.last_job >= num)
     }
     if (filterStore.quantity) {
-      const num = filterStore.quantity as number;
+      const num = filterStore.quantity as number
       result = result.filter((item) => item.total_jobs >= num)
     }
     setData(result)
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     setFiltro()
-  },[filterStore])
+  }, [filterStore])
 
   const getAllUsers = async () => {
     const response = await sendData('get-all-users')
@@ -213,18 +232,18 @@ function Index() {
     if (response.success) {
       let result: IDataClients[] = response.data
       if (filterStore.register) {
-        console.log("FILTRO DE REGISTRO")
-        const num = filterStore.register as number;
+        console.log('FILTRO DE REGISTRO')
+        const num = filterStore.register as number
         result = result.filter((item) => item.createdAt >= num)
       }
       if (filterStore.create) {
-        console.log("FILTRO DE ULTIMO TURNO")
-        const num = filterStore.create as number;
+        console.log('FILTRO DE ULTIMO TURNO')
+        const num = filterStore.create as number
         result = result.filter((item) => item.last_job >= num)
       }
       if (filterStore.quantity) {
-        console.log("FILTRO DE CANTIDAD")
-        const num = filterStore.quantity as number;
+        console.log('FILTRO DE CANTIDAD')
+        const num = filterStore.quantity as number
         result = result.filter((item) => item.total_jobs >= num)
       }
       console.log(result)
@@ -354,8 +373,8 @@ function Index() {
             localeText={gridLocaleText}
             rows={data}
             columns={column}
-            hideFooter
             loading={isLoad}
+            rowSelection={false}
             autoHeight
           />
         </Box>
@@ -414,7 +433,8 @@ function Index() {
       </Dialog>
 
       <Dialog
-        fullWidth maxWidth="sm"
+        fullWidth
+        maxWidth="sm"
         open={filterQuantity}
         onClose={() => setFilterQuantity(false)}
       >
@@ -430,13 +450,13 @@ function Index() {
           </div>
           <TextField
             type="number"
-            className='w-full my-4'
+            className="w-full my-4"
             onChange={(e) => setFilterQuantityData(parseInt(e.target.value))}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setFilterQuantity(false)}>Cancelar</Button>
-          <Button variant="contained" onClick={() => handleFilter("quantity", filterQuantityData) }>
+          <Button variant="contained" onClick={() => handleFilter('quantity', filterQuantityData)}>
             Aplicar filtro
           </Button>
         </DialogActions>
