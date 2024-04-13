@@ -44,6 +44,11 @@ export const post = {
   createPersonal: `INSERT INTO personal (id, createdAt, lastName, name, phono) VALUES (?, ?, ?, ?, ?)`
 }
 
+export const put = {
+  updateClient: `UPDATE clients SET name = ?, lastName = ?, phono = ?, nickname = ? WHERE id = ?`,
+  updatePersonal: `UPDATE personal SET name = ?, lastName = ?, phono = ? WHERE id = ?`
+}
+
 export const del = {
   personalById: `DELETE FROM personal WHERE id = ?`,
   allJobsByPersonalId: `DELETE FROM jobs WHERE personal_id = ?`,

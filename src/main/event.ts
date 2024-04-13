@@ -1,7 +1,7 @@
 import { app, ipcMain } from "electron";
 import db from "./db/conn";
-import { del, get, post } from "./db/querys";
-import { IClient } from "./types/client";
+import { del, get, post, put } from "./db/querys";
+import { IClient, IUpdateUser } from "./types/client";
 import v4 from "uuid4"
 
 export const setupHandlers = () => {
@@ -164,5 +164,19 @@ export const setupHandlers = () => {
     } catch (error: any) {
       return {success: false, error: error.message}
     } 
+  })
+
+  ipcMain.handle("update-user", async (_, data: IUpdateUser) => {
+    try {
+      const result = await new Promise((resolve, reject) => {
+        db.all(put.updateClient, [data.name, data.lastName, data.phono, data.nickName, data.id], (err, result) => {
+          if (err) return reject(err)
+          else return resolve(result)
+        })
+      })
+      return {success: true, result}
+    } catch (error: any) {
+      return {success: false, error: error.message}
+    }
   })
 }

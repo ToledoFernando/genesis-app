@@ -1,6 +1,6 @@
-import { CircularProgress, Dialog, DialogContent, LinearProgress, ThemeProvider } from '@mui/material'
+import { Backdrop, CircularProgress, Dialog, DialogContent, LinearProgress, ThemeProvider } from '@mui/material'
 import { theme } from './components/ThemeProvider'
-import toast, { Toaster } from 'react-hot-toast'
+import toast, { Toaster, useToaster } from 'react-hot-toast'
 import { Route, Routes } from 'react-router-dom'
 import SideBar from './components/SideBar/SideBar'
 import Home from './pages/Home'
@@ -35,6 +35,7 @@ function App() {
   const [progress, setProgress] = useState<number>(0)
   const [status, setStatus] = useState<number>(0)
   const [showDialog, setShowDialog] = useState<boolean>(false)
+  const [showBD, setShowBD] = useState<boolean>(false)
 
   const upAvalible = (_, v: string) => {    
     toast.error(
@@ -76,6 +77,15 @@ function App() {
     )
   }
 
+  const {toasts} = useToaster();
+
+  useEffect(()=>{
+    if (toast.length === 0) setShowBD(false)
+    const isLoad = toasts.find(t => t.type === "loading")
+    if (isLoad) setShowBD(true)
+    else setShowBD(false)
+  },[toasts])
+
   useEffect(() => {
     Store.General.getState().getPersonal()
     onEvent('up', upAvalible)
@@ -91,6 +101,7 @@ function App() {
 
   return (
     <>
+      <Backdrop className='backdrop-blur-sm' open={showBD} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} />
       <ThemeProvider theme={theme}>
         <div className="bg-gray-100 relative h-screen w-screen gap-4 flex overflow-hidden">
           <HeaderBar />

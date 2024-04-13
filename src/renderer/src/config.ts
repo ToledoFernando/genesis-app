@@ -13,4 +13,7 @@ export const gridLocaleText = {
   columnsPanelShowAllButton: "Mostrar todo",
   columnsPanelTextFieldLabel: "Buscar columna",
   columnsPanelTextFieldPlaceholder: "Titulo de columna",
+  MuiTablePagination: {
+    labelRowsPerPage: "Filas por paginas"
+  }
 } as GridLocaleText // traduce las opciones de las tablas de x-data-grid al español

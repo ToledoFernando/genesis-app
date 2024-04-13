@@ -4,7 +4,7 @@ import style from 'styled-components'
 import { Config } from '@renderer/store/config'
 import { useState } from 'react'
 import { IColor } from 'react-color-palette'
-import { sendData } from '@renderer/helpers/sendData'
+// import { sendData } from '@renderer/helpers/sendData'
 import toast from 'react-hot-toast'
 
 function Index() {
