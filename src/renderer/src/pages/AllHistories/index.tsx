@@ -1,4 +1,4 @@
-import { DataGrid, GridCellEditStopParams, GridColDef } from '@mui/x-data-grid'
+import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { gridLocaleText } from '../../config'
 import {
   Box,
@@ -51,8 +51,6 @@ function Index() {
   const [dataAux, setDataAux] = useState<IDataClients[]>([])
   const [isLoad, setIsLoad] = useState<boolean>(true)
   const [searchTerm, setSearchTerm] = useState<string>('')
-
-  const [bd, setBd] = useState<boolean>(false)
 
   //
   const [filterTurn, setFilterTurn] = useState<boolean>(false)
